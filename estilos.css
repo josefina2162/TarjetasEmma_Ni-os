@@ -1,0 +1,146 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+  background-color: #FCEBF1;
+}
+
+/* --- OVERLAY --- */
+#overlay-fullscreen {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background:#FCEBF1;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction: column;
+  z-index:9999;
+}
+
+#overlay-fullscreen button {
+  position:absolute;
+  width:100%;
+  height:30%;
+  top:45%;
+  background:transparent;
+  border:none;
+}
+
+/* --- PANTALLAS --- */
+.pantalla {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #FCEBF1;
+}
+
+.tarjeta {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* --- BOTONES INVISIBLES --- */
+
+button {
+  position:absolute;
+  background: transparent;
+  border:none;
+  color: transparent;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-ubicacion-2 {
+    background: rgb(255 0 0 / 0%);
+    /* border: 2px dashed rgba(255, 255, 255, 0.7); */
+    width: 100%;
+    height: 20%;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.btn-aceptar-2-1 {
+    background: rgb(255 0 0 / 0%);
+    /* border: 2px dashed rgba(255, 255, 255, 0.7); */
+    width: 100%;
+    height: 20%;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+/* .btn-fotos-5 {
+    background: rgba(255, 0, 0, 0.985);
+    border: 2px dashed rgba(255, 255, 255, 0.7); 
+    width: 100%;
+    height: 20%;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+    cursor: pointer;
+    pointer-events: auto;
+}
+ */
+
+.btn-continuar-1,
+.btn-continuar-2,
+.btn-continuar-3,
+.btn-continuar-4,
+.btn-continuar-5,
+.btn-continuar-6 {
+  width:100%;
+  height:30%;
+  bottom:0;
+  left:0;
+}
+
+/* TRANSICIÓN */
+
+/* --- SLIDE LATERAL RÁPIDO (SIN FADE) --- */
+.pantalla {
+  transform: translateX(100%);
+  transition: transform 0.2s ease-out;
+  pointer-events: none;
+}
+
+.pantalla.activa {
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.pantalla.saliendo {
+  transform: translateX(-100%);
+}
+
+
+/* --- FADE RÁPIDO (solo para p2 <-> p2.1) --- */
+.pantalla.fade {
+  transform: translateX(0); /* anulamos slide */
+  opacity: 0;
+  transition: opacity 0.15s ease-out;
+}
+
+.pantalla.fade.activa {
+  opacity: 1;
+}
+
+.pantalla.fade.saliendo {
+  opacity: 0;
+}

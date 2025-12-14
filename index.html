@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cumpleaños de Emma</title>
+  <link rel="stylesheet" href="estilos.css" />
+</head>
+
+<body>
+
+<!-- OVERLAY INICIAL -->
+<section id="overlay-fullscreen">
+  <img src="img/inicioBoton_android.svg" alt="Inicio" class="tarjeta mobile" />
+  <button class="botonPantalla" id="btn-fullscreen">Abrir Tarjeta</button>
+</section>
+
+<!-- PANTALLA 1 -->
+<section id="pantalla1" class="pantalla" style="display:none;">
+  <img src="img/1_android.svg" class="tarjeta mobile" />
+  <button class="btn-continuar-1"></button>
+</section>
+
+<!-- PANTALLA 2 -->
+<section id="pantalla2" class="pantalla" style="display:none;">
+  <img src="img/2_android.svg" class="tarjeta mobile" />
+  <button class="btn-continuar-2"></button>
+  <button class="btn-ubicacion-2"></button>
+</section>
+
+<!-- PANTALLA 2.1 -->
+<section id="pantalla2_1" class="pantalla" style="display:none;">
+  <img src="img/2.1_android.svg" class="tarjeta mobile" />
+  <button class="btn-aceptar-2-1"></button>
+</section>
+
+<!-- PANTALLA 3 -->
+<section id="pantalla3" class="pantalla" style="display:none;">
+  <img src="img/3_android.svg" class="tarjeta mobile" />
+  <button class="btn-continuar-3"></button>
+</section>
+
+<!-- PANTALLA 4 -->
+<section id="pantalla4" class="pantalla" style="display:none;">
+  <img src="img/4_android.svg" class="tarjeta mobile" />
+  <button class="btn-continuar-4"></button>
+</section>
+
+<!-- PANTALLA 5 -->
+<section id="pantalla5" class="pantalla" style="display:none;">
+  <img src="img/5_android.svg" class="tarjeta mobile" />
+  <button class="btn-continuar-5"></button>
+</section>
+
+
+<script>
+/* ======== FULLSCREEN ======== */
+const btnFullscreen = document.getElementById('btn-fullscreen');
+const overlay = document.getElementById('overlay-fullscreen');
+
+btnFullscreen.addEventListener('click', () => {
+  const el = document.documentElement;
+
+  // fullscreen sólo Android
+  if (!esSafariIOS()) {
+    if (el.requestFullscreen) el.requestFullscreen();
+    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+  }
+
+ overlay.remove();
+p1.style.display = "block";
+requestAnimationFrame(() => {
+  p1.classList.add("activa");
+});
+});
+
+
+
+/* ======== ELEMENTOS ======== */
+const p1 = document.getElementById("pantalla1");
+const p2 = document.getElementById("pantalla2");
+const p21 = document.getElementById("pantalla2_1");
+const p3 = document.getElementById("pantalla3");
+const p4 = document.getElementById("pantalla4");
+const p5 = document.getElementById("pantalla5");
+const p6 = document.getElementById("pantalla6");
+
+
+
+/* ======== NAVEGACIÓN ======== */
+
+/* 1 → 2 */
+document.querySelector(".btn-continuar-1").addEventListener("click", () => {
+  cambiarPantalla(p1, p2);
+});
+
+/* 2 → 3 (continuar) */
+document.querySelector(".btn-continuar-2").addEventListener("click", () => {
+  cambiarPantalla(p2, p3);
+});
+
+/* 2 → 2.1 (ver ubicación) */
+document.querySelector(".btn-ubicacion-2").addEventListener("click", () => {
+  cambiarPantallaFade(p2, p21);
+});
+
+/* 2.1 → 2 (aceptar) */
+document.querySelector(".btn-aceptar-2-1").addEventListener("click", () => {
+  cambiarPantallaFade(p21, p2);
+});
+
+/* 3 → 4 */
+document.querySelector(".btn-continuar-3").addEventListener("click", () => {
+  cambiarPantalla(p3, p4);
+});
+
+/* 4 → 5 */
+document.querySelector(".btn-continuar-4").addEventListener("click", () => {
+  cambiarPantalla(p4, p5);
+});
+
+/* 5 → 1 */
+document.querySelector(".btn-continuar-5").addEventListener("click", () => {
+  cambiarPantalla(p5, p1);
+});
+
+// TRANSICIÓN
+function cambiarPantalla(pantallaActual, pantallaNueva) {
+  // mostramos la nueva pantalla primero
+  pantallaNueva.style.display = "block";
+
+  // limpiamos estados previos
+  pantallaNueva.classList.remove("activa", "saliendo");
+
+  // en el próximo frame animamos
+  requestAnimationFrame(() => {
+    pantallaActual.classList.add("saliendo");
+    pantallaActual.classList.remove("activa");
+
+    pantallaNueva.classList.add("activa");
+  });
+
+  // al terminar la animación ocultamos la vieja
+  setTimeout(() => {
+    pantallaActual.style.display = "none";
+    pantallaActual.classList.remove("saliendo");
+  }, 200); // MISMO tiempo que el CSS
+}
+
+function cambiarPantallaFade(pantallaActual, pantallaNueva) {
+  // activamos modo fade
+  pantallaActual.classList.add("fade");
+  pantallaNueva.classList.add("fade");
+
+  pantallaNueva.style.display = "block";
+  pantallaNueva.classList.remove("activa", "saliendo");
+
+  requestAnimationFrame(() => {
+    pantallaActual.classList.add("saliendo");
+    pantallaActual.classList.remove("activa");
+
+    pantallaNueva.classList.add("activa");
+  });
+
+  setTimeout(() => {
+    pantallaActual.style.display = "none";
+    pantallaActual.classList.remove("saliendo", "fade");
+    pantallaNueva.classList.remove("fade");
+  }, 150); // MISMO tiempo que el CSS
+}
+
+
+/* ======== DETECTAR SAFARI iOS ======== */
+function esSafariIOS() {
+  return /^((?!chrome|android).)*safari/i.test(navigator.userAgent) &&
+         /iP(ad|hone|od)/i.test(navigator.userAgent);
+}
+
+
+
+/* ======== CAMBIAR IMÁGENES SEGÚN ANDROID / iOS ======== */
+function cambiarImagenes() {
+  const sufijo = esSafariIOS() ? "_ios.svg" : "_android.svg";
+
+  const pantallas = [
+    ["#overlay-fullscreen .tarjeta", "inicioBoton"],
+    ["#pantalla1 .tarjeta", "1"],
+    ["#pantalla2 .tarjeta", "2"],
+    ["#pantalla2_1 .tarjeta", "2.1"],
+    ["#pantalla3 .tarjeta", "3"],
+    ["#pantalla4 .tarjeta", "4"],
+    ["#pantalla5 .tarjeta", "5"],
+    ["#pantalla6 .tarjeta", "6"]
+  ];
+
+  pantallas.forEach(([selector, base]) => {
+    const el = document.querySelector(selector);
+    if (el) el.src = `img/${base}${sufijo}`;
+  });
+}
+
+
+
+/* ======== FIX ALTURA iOS ======== */
+function ajustarAlturaIOS() {
+  if (esSafariIOS()) {
+    const alto = window.innerHeight + "px";
+
+    document.querySelectorAll("section").forEach(sec => {
+      sec.style.height = alto;
+    });
+
+    document.querySelectorAll(".tarjeta").forEach(img => {
+      img.style.height = alto;
+      img.style.width = "100%";
+      img.style.objectFit = "contain";
+    });
+  }
+}
+
+
+
+/* ======== EJECUCIÓN ======== */
+window.addEventListener("load", () => {
+  cambiarImagenes();
+  ajustarAlturaIOS();
+});
+window.addEventListener("resize", ajustarAlturaIOS);
+
+</script>
+
+</body>
+</html>
